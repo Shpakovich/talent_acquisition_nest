@@ -1,32 +1,40 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { UserDto } from './user.dto/user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  users: any[];
-  constructor() {
-    this.users = [
-      {
-        id: 1,
-        name: 'Denis',
-        email: 'shmakovbx@gmail.com',
-        phone: '89263101733',
-      },
-      {
-        id: 2,
-        name: 'Di',
-        email: 'dylirty@gmail.com',
-        phone: '89263101732',
-      },
-      {
-        id: 3,
-        name: 'Vlad',
-        email: 'papacha@gmail.com',
-        phone: '89263101731',
-      },
-    ];
-  }
+  constructor(private readonly UserService: UserService) {}
   @Get()
   async getAll() {
-    return this.users;
+    return this.UserService.getAll();
+  }
+
+  @Post()
+  async create(@Body() dto: UserDto) {
+    return this.UserService.create(dto);
+  }
+
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    return this.UserService.getById(id);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.UserService.delete(id);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() dto: UserDto) {
+    await this.UserService.update(id, dto);
   }
 }
